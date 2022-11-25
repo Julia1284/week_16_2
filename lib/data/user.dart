@@ -11,12 +11,12 @@ class User {
   String phoneNumber;
   bool launch = false;
 
-  User({
-    this.id = 0,
-    required this.username,
-    required this.usersurname,
-    required this.email,
-    required this.password,
-    required this.phoneNumber,
-  });
+  User(
+      {this.id = 0,
+      required this.username,
+      required this.usersurname,
+      required this.email,
+      required this.password,
+      required this.phoneNumber,
+      required this.launch});
 }

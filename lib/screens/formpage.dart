@@ -2,8 +2,6 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:week_16_2/data/user_repository.dart';
-import 'package:week_16_2/data/users.dart';
 import 'package:sizer/sizer.dart';
 import 'package:week_16_2/main.dart';
 
@@ -18,18 +16,8 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  //функция добавления данных в память
-  // Future addUser(email, password, name, surname, phoneNumber) async {
-  //   await UserPreferences().setEmail(email);
-  //   await UserPreferences().setPassword(password);
-  //   await UserPreferences().setUsername(name);
-  //   await UserPreferences().setUsersurname(surname);
-  //   await UserPreferences().setPhoneNumber(phoneNumber);
-  // }
-
-  Box<User> userBox = objectBox.store.box<User>();
-  // final _userRepo = UserRepository();
-  // late var _users = <User>[];
+  Box<User> userBox =
+      objectBox.store.box<User>(); //обозначаем нашу таблицу с пользователями
   final _formKey = GlobalKey<FormState>();
   var _agreement = false;
   String name = '';
@@ -39,18 +27,7 @@ class _FormPageState extends State<FormPage> {
   String phoneNumber = '';
   @override
   void initState() {
-    // _userRepo
-    //     .initDB()
-    //     .whenComplete(() => setState(() => _users = _userRepo.users));
-    // print(_users);
-    // users = objectBox.store.box<User>.getAll();
-    // print(users!.count());
     super.initState();
-    // email = UserPreferences().getEmail() ?? '';
-    // password = UserPreferences().getPassword() ?? '';
-    // name = UserPreferences().getUsername() ?? '';
-    // surname = UserPreferences().getUsersurname() ?? '';
-    // phoneNumber = UserPreferences().getPhoneNumber() ?? '';
   }
 
   @override
@@ -237,11 +214,9 @@ class _FormPageState extends State<FormPage> {
                                   usersurname: surname,
                                   email: email,
                                   password: password,
-                                  phoneNumber: phoneNumber));
-                              print(userBox.count());
-                              // addUser(
-                              //     email, password, name, surname, phoneNumber);
-                              Navigator.of(context).pop();
+                                  phoneNumber: phoneNumber,
+                                  launch: false));
+                              Navigator.pushNamed(context, '/loginpage');
                             },
                             child: const Text('Sign in')),
                       )

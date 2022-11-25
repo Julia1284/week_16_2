@@ -138,9 +138,9 @@ ModelDefinition getObjectBoxModel() {
               password: const fb.StringReader(asciiOptimization: true)
                   .vTableGet(buffer, rootOffset, 12, ''),
               phoneNumber: const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 14, ''))
-            ..launch =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 16, false);
+                  .vTableGet(buffer, rootOffset, 14, ''),
+              launch: const fb.BoolReader()
+                  .vTableGet(buffer, rootOffset, 16, false));
 
           return object;
         })

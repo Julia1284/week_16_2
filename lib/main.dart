@@ -27,34 +27,51 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+//https://github.com/doctorcode9/windows_todo_app_flutter.git
 class _MyAppState extends State<MyApp> {
-  var newLaunch; //объявляем переменную для загрузкт экрана
-  final userRepo = UserRepository();
-  late var users = <User>[];
+  late List<User> users; //список всех пользователей
+  late Box<User> userBox; // box для пользователей - таблица пользователей
+  bool newlaunch = false; // булевая переменная для загрузки экрана
+  late User user; // экземпляр пользователя
+  // неизвестный пользователь
+  User unknownUser = User(
+      username: 'Unknown',
+      usersurname: 'Unknown',
+      email: 'Unknown',
+      password: 'Unknown',
+      phoneNumber: 'Unknown',
+      launch: false);
 
   @override
   void initState() {
     super.initState();
-
-    getApplicationDocumentsDirectory().then((directory) {
-      _store = Store(
-        getObjectBoxModel(),
-        directory: directory.path,
-      );
-    });
-    userRepo
-        .initDB()
-        .whenComplete(() => setState(() => users = userRepo.users));
-    loadNewLaunch();
+    //получаем всех пользователей из  store
+    users = objectBox.store.box<User>().getAll();
+    // инициализируем userbox
+    userBox = objectBox.store.box<User>();
+    user = checklaunch();
   }
 
-//функция, которая получает из sharedPreference булевое значение и присваивает его переменной.
-// значение изначально false, если галочка remember нажата, то меняется на true.
-  loadNewLaunch() async {
+  @override
+  void dispose() {
+    objectBox.store.close();
+    super.dispose();
+  }
+
+// функция проверки загрузки, если галочка была поставлена, то launch у какого-то пользователя true. Ищем его и возвращаем, чтобы потом передать на страницу пользователя
+  checklaunch() {
+    for (var i = 0; i < users.length; i++) {
+      if (users[i].launch == true) {
+        setState(() {
+          newlaunch = true;
+        });
+        return users[i];
+      }
+    }
     setState(() {
-      bool userNewLaunch = UserPreferences().getLaunch() ?? false;
-      newLaunch = userNewLaunch;
+      newlaunch = false;
     });
+    return unknownUser;
   }
 
   @override
@@ -65,12 +82,12 @@ class _MyAppState extends State<MyApp> {
           title: 'Flutter Demo',
           theme: ThemeData(primaryColor: Colors.black26),
           routes: {
-            // если newLaunch true, то загружаем  UserPage, в противном случае LoginPage
+            // если newдaunch true, то загружаем  UserPage, в противном случае LoginPage
             '/': (context) =>
-                newLaunch ? UserPage(newLaunch) : const LoginPage(),
+                newlaunch ? UserPage(user: user) : const LoginPage(),
             '/loginpage': ((context) => const LoginPage()),
-            '/formpage': (context) => FormPage(),
-            '/userpage': (context) => UserPage(newLaunch),
+            '/formpage': (context) => const FormPage(),
+            '/userpage': (context) => UserPage(user: user),
           },
         );
       },
