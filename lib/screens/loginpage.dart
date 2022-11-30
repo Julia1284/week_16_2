@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     for (var i = 0; i < users.length; i++) {
       if (controllerEmail.text == users[i].email &&
           controllerPassword.text == users[i].password) {
+        print(users[i].id);
         updateUser(users[i], newlaunch);
         //если галочка нажата, то нет кнопки назад, и мы не сможем вернуться и поставить галочку у еще одного пользователя. Т.о сохраненный будет только один пользователь
         if (newlaunch) {
@@ -42,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(
                   builder: (context) => UserPage(
                       user: User(
+                          id: users[i].id,
                           username: users[i].username,
                           usersurname: users[i].usersurname,
                           email: users[i].email,
@@ -55,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               MaterialPageRoute(
                   builder: (context) => UserPage(
                       user: User(
+                          id: users[i].id,
                           username: users[i].username,
                           usersurname: users[i].usersurname,
                           email: users[i].email,

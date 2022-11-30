@@ -17,16 +17,24 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   bool newlaunch = false;
   late Box<User> userBox;
+  List<User> users = objectBox.store.box<User>().getAll();
 
   updateUser(newlaunch) {
     widget.user.launch = newlaunch;
     userBox.put(widget.user);
   }
 
+  removeUser(id) {
+    userBox.remove(id);
+  }
+
   @override
   void initState() {
     super.initState();
     userBox = objectBox.store.box<User>();
+    users = objectBox.store.box<User>().getAll();
+
+    print(widget.user.id);
   }
 
   @override
@@ -117,7 +125,18 @@ class _UserPageState extends State<UserPage> {
                   Navigator.pushNamed(context, '/loginpage');
                 },
                 icon: const Icon(Icons.exit_to_app),
-                label: const Text('Exit'))
+                label: const Text('Exit')),
+            OutlinedButton.icon(
+                onPressed: () {
+                  // setState(() {
+                  //   widget._newLaunch = false;
+                  // });
+                  // changeLaunch(widget._newLaunch);
+                  removeUser(widget.user.id);
+                  Navigator.pushNamed(context, '/loginpage');
+                },
+                icon: const Icon(Icons.exit_to_app),
+                label: const Text('Delete'))
           ],
         ),
       ),
